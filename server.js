@@ -14,6 +14,17 @@ const wss = new Server({ server });
 
 wss.on('connection', (ws) => {
   console.log('Client connected');
+
+  ws.on('message', (message, isBinary) => {
+    console.log('received: ' + message)
+    // ws.send('got your message: ' + message)
+
+    //all clientes
+    wss.clients.forEach((client) => {
+      client.send(message, { binary: isBinary });
+    });
+  })
+
   ws.on('close', () => console.log('Client disconnected'));
 });
 
